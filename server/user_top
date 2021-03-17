@@ -1,0 +1,69 @@
+#!/usr/bin/env python3
+
+# show the CPU and MEM usage percentage of each user on login node where this script is running.
+
+import re
+import os
+import subprocess
+import numpy as np
+
+current_pid = os.getpid()
+
+top_output = str(subprocess.check_output(['top', '-b', '-n', '1']), 'utf-8')
+
+ref_line = re.compile(
+r"""
+\s* (\d+)             # PID     1
+\s+ (\w+)             # USER    2
+\s+ \w+               # PR
+\s+ \w+               # NI
+\s+ \w+               # VIRT
+\s+ \w+               # RES
+\s+ \w+               # SHR
+\s+ \w+               # S
+\s+ (\d+\.?\d*)       # %CPU    3
+\s+ (\d+\.?\d*)       # %MEM    4
+\s+ \d+:\d+\.?\d*     # TIME+
+\s+ (.*)              # COMMAND 5
+\s*
+""", re.X)
+
+user_cpu = {}
+user_mem = {}
+
+for line in top_output.split('\n'):
+    m = ref_line.match(line)
+    if not m: continue
+    pid = int(m.group(1))
+    user = m.group(2)
+    cpu = float(m.group(3))
+    mem = float(m.group(4))
+    cmd = m.group(5).strip()
+    if cmd == 'top': continue
+    if pid == current_pid: continue
+    if user == 'root': continue
+    if user == 'nobody': continue
+    if cpu < 0.01: continue
+    if user in user_cpu:
+        user_cpu[user] += cpu / 28.0
+        user_mem[user] += mem
+    else:
+        user_cpu[user] = cpu / 28.0
+        user_mem[user] = mem
+
+user_list = []
+cpu_list = []
+for x in user_cpu:
+    user_list.append(x)
+    cpu_list.append(user_cpu[x])
+
+user_index = np.argsort(cpu_list)
+
+print(' %-12s %-8s %-8s' % ('USER', 'CPU(%)', 'MEM(%)'))
+for x in reversed(user_index):
+    user = user_list[x]
+    cpu = user_cpu[user]
+    mem = user_mem[user]
+    print(' %-12s %-8.2f %-8.2f' % (user, cpu, mem))
+
+

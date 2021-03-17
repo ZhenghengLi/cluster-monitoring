@@ -1,0 +1,37 @@
+#!/usr/bin/env python3
+
+# show the CPU statistics of all nodes by command 'mpstat'
+
+import re
+import subprocess
+from datetime import datetime
+from multiprocessing import Pool
+
+def read_status(server):
+    return (server, str(subprocess.check_output(['ssh', server, 'mpstat', '5', '1']), 'utf-8'))
+
+server_names = ['host1', 'host2', 'host3', 'host4']
+
+pool = Pool(8)
+results = pool.map(read_status, server_names)
+pool.close()
+pool.join()
+
+mpstat_outputs = {}
+for srv, res in results:
+    mpstat_outputs[srv] = res
+
+header = mpstat_outputs['host1'].split('\n')[-4]
+header_line = '%-14s %s' % ('node', header)
+print()
+print('-' * 113)
+print(header_line)
+print('-' * 113)
+for x in server_names:
+    status = mpstat_outputs[x].split('\n')[-3]
+    cur_line = '%-14s %s' % (x, status)
+    print(cur_line)
+
+print()
+
+
