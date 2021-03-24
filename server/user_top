@@ -17,9 +17,9 @@ r"""
 \s+ (\w+)             # USER    2
 \s+ \w+               # PR
 \s+ \w+               # NI
-\s+ \w+               # VIRT
-\s+ \w+               # RES
-\s+ \w+               # SHR
+\s+ \S+               # VIRT
+\s+ \S+               # RES
+\s+ \S+               # SHR
 \s+ \w+               # S
 \s+ (\d+\.?\d*)       # %CPU    3
 \s+ (\d+\.?\d*)       # %MEM    4
@@ -43,7 +43,6 @@ for line in top_output.split('\n'):
     if pid == current_pid: continue
     if user == 'root': continue
     if user == 'nobody': continue
-    if cpu < 0.01: continue
     if user in user_cpu:
         user_cpu[user] += cpu / 28.0
         user_mem[user] += mem
@@ -64,6 +63,7 @@ for x in reversed(user_index):
     user = user_list[x]
     cpu = user_cpu[user]
     mem = user_mem[user]
+    if cpu < 0.01 and mem < 0.01: continue
     print(' %-12s %-8.2f %-8.2f' % (user, cpu, mem))
 
 
