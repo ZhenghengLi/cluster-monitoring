@@ -2,14 +2,17 @@
 
 import argparse
 import time
+import json
 import psutil
 
 parser = argparse.ArgumentParser(description='desc')
-parser.add_argument("-i", dest="interval", type=int, default=1)
+parser.add_argument("-i", dest="interval", type=int, default=2)
 args = parser.parse_args()
 
 user_dict = {}
-exclude_user = ['root', 'systemd-resolve', 'systemd-timesync']
+exclude_users = ['root', 'systemd-resolve', 'systemd-timesync']
+
+my_pid = psutil.Process().pid
 
 proc: psutil.Process
 for proc in psutil.process_iter():
@@ -19,8 +22,10 @@ time.sleep(args.interval)
 
 for proc in psutil.process_iter():
     with proc.oneshot():
+        if proc.pid == my_pid:
+            continue
         user = proc.username()
-        if user in exclude_user:
+        if user in exclude_users:
             continue
         cpu = proc.cpu_percent()
         mem = proc.memory_percent()
@@ -34,4 +39,8 @@ for proc in psutil.process_iter():
             user_dict[user]['cpu'] = cpu
             user_dict[user]['mem'] = mem
 
-print(user_dict)
+for user in list(user_dict):
+    if user_dict[user]['cpu'] < 0.1 or user_dict[user]['mem'] < 0.1:
+        del user_dict[user]
+
+print(json.dumps(user_dict))
