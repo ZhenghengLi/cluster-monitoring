@@ -1,0 +1,6 @@
+**/build/*
+**/bin/*
+**/.vscode/*
+**/.DS_Store
+*.h5
+__pycache__/
