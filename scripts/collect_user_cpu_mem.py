@@ -17,13 +17,13 @@ node_list = ['cu01', 'cu02', 'cu03', 'cu04', 'gpu01', 'gpu02', 'gpu03', 'gpu04']
 script_path = '/data-ib/home/lizhh1/workspace/cluster-monitoring/scripts/user_cpu_mem.py'
 
 
-def remote_status(server: str):
-    status = str(subprocess.check_output(['ssh', '%s@%s' % (user, server),
+def remote_output(server: str):
+    output = str(subprocess.check_output(['ssh', '%s@%s' % (user, server),
                                           script_path, '-i', str(args.interval), '-r', str(args.repeat)]), 'utf-8')
-    return (server, status)
+    return (server, json.loads(output))
 
 
 pool = Pool(len(node_list))
-status_list = pool.map(remote_status, node_list)
+status_list = pool.map(remote_output, node_list)
 
-print(json.dumps(status_list), end='')
+print(json.dumps(status_list))

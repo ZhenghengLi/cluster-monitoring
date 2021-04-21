@@ -27,4 +27,4 @@ for x in range(args.repeat):
 for attr in attr_list:
     cpu_times[attr] /= args.repeat
 
-print(json.dumps(cpu_times), end='')
+print(json.dumps(cpu_times))

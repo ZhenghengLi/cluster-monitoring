@@ -46,4 +46,4 @@ for user in list(user_dict):
     if user_dict[user]['cpu'] < 0.1 or user_dict[user]['mem'] < 0.1:
         del user_dict[user]
 
-print(json.dumps(user_dict), end='')
+print(json.dumps(user_dict))
