@@ -17,7 +17,10 @@ my_pid = psutil.Process().pid
 
 proc: psutil.Process
 for proc in psutil.process_iter():
-    proc.cpu_percent()
+    try:
+        proc.cpu_percent()
+    except:
+        pass
 
 for x in range(args.repeat):
     time.sleep(args.interval)
