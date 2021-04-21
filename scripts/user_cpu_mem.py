@@ -43,7 +43,7 @@ for x in range(args.repeat):
 for user in list(user_dict):
     user_dict[user]['cpu'] /= args.repeat * psutil.cpu_count()
     user_dict[user]['mem'] /= args.repeat
-    if user_dict[user]['cpu'] < 0.1 or user_dict[user]['mem'] < 0.1:
+    if user_dict[user]['cpu'] < 0.1 and user_dict[user]['mem'] < 0.1:
         del user_dict[user]
 
 print(json.dumps(user_dict))
