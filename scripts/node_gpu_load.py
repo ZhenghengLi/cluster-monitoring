@@ -39,4 +39,4 @@ for x in gpu_load:
     gpu_load[x]['gpu'] /= args.repeat
     gpu_load[x]['mem'] /= args.repeat
 
-print(json.dumps(gpu_load))
+print(json.dumps(gpu_load), end='')
