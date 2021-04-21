@@ -22,23 +22,26 @@ for proc in psutil.process_iter():
 for x in range(args.repeat):
     time.sleep(args.interval)
     for proc in psutil.process_iter():
-        with proc.oneshot():
-            if proc.pid == my_pid:
-                continue
-            user = proc.username()
-            if user in exclude_users:
-                continue
-            cpu = proc.cpu_percent()
-            mem = proc.memory_percent()
-            if cpu + mem < 0.01:
-                continue
-            if user in user_dict:
-                user_dict[user]['cpu'] += cpu
-                user_dict[user]['mem'] += mem
-            else:
-                user_dict[user] = {}
-                user_dict[user]['cpu'] = cpu
-                user_dict[user]['mem'] = mem
+        try:
+            with proc.oneshot():
+                if proc.pid == my_pid:
+                    continue
+                user = proc.username()
+                if user in exclude_users:
+                    continue
+                cpu = proc.cpu_percent()
+                mem = proc.memory_percent()
+                if cpu + mem < 0.01:
+                    continue
+                if user in user_dict:
+                    user_dict[user]['cpu'] += cpu
+                    user_dict[user]['mem'] += mem
+                else:
+                    user_dict[user] = {}
+                    user_dict[user]['cpu'] = cpu
+                    user_dict[user]['mem'] = mem
+        except:
+            pass
 
 for user in list(user_dict):
     user_dict[user]['cpu'] /= args.repeat * psutil.cpu_count()
