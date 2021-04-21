@@ -26,4 +26,4 @@ def remote_status(server: str):
 pool = Pool(len(node_list))
 status_list = pool.map(remote_status, node_list)
 
-print(json.dumps(status_list))
+print(json.dumps(status_list), end='')
