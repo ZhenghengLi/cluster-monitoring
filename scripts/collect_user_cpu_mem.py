@@ -18,8 +18,8 @@ script_path = '/data-ib/home/lizhh1/workspace/cluster-monitoring/scripts/user_cp
 
 
 def remote_output(server: str):
-    output = str(subprocess.check_output(['ssh', '%s@%s' % (user, server),
-                                          script_path, '-i', str(args.interval), '-r', str(args.repeat)]), 'utf-8')
+    output = subprocess.check_output(['ssh', '%s@%s' % (user, server),
+                                      script_path, '-i', str(args.interval), '-r', str(args.repeat)])
     return (server, json.loads(output))
 
 
