@@ -51,6 +51,6 @@ for user in user_dict:
     user_dict[user]['cpu'] /= args.repeat * psutil.cpu_count()
     user_dict[user]['mem'] /= args.repeat
     if user_dict[user]['cpu'] > 0.1 or user_dict[user]['mem'] > 0.1:
-        user_list.append({'name': user, 'util': user_dict[user]})
+        user_list.append({'user': user, 'util': user_dict[user]})
 
 print(json.dumps(user_list))
