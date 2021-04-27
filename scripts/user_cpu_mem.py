@@ -46,10 +46,11 @@ for x in range(args.repeat):
         except:
             pass
 
-for user in list(user_dict):
+user_list = []
+for user in user_dict:
     user_dict[user]['cpu'] /= args.repeat * psutil.cpu_count()
     user_dict[user]['mem'] /= args.repeat
-    if user_dict[user]['cpu'] < 0.1 and user_dict[user]['mem'] < 0.1:
-        del user_dict[user]
+    if user_dict[user]['cpu'] > 0.1 or user_dict[user]['mem'] > 0.1:
+        user_list.append({'name': user, 'util': user_dict[user]})
 
-print(json.dumps(user_dict))
+print(json.dumps(user_list))
