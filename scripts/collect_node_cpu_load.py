@@ -20,7 +20,7 @@ script_path = '/data-ib/home/lizhh1/workspace/cluster-monitoring/scripts/node_cp
 def remote_output(server: str):
     output = subprocess.check_output(['ssh', '%s@%s' % (user, server),
                                       script_path, '-i', str(args.interval), '-r', str(args.repeat)])
-    return (server, json.loads(output))
+    return {'node': server, 'data': json.loads(output)}
 
 
 pool = Pool(len(node_list))
