@@ -2,11 +2,13 @@
 
 import argparse
 import time
+import os
 import json
 import subprocess
 import requests
 from multiprocessing import Pool
 from datetime import datetime
+
 
 parser = argparse.ArgumentParser(description='desc')
 parser.add_argument("-i", dest="interval", type=int, default=1)
@@ -15,7 +17,10 @@ parser.add_argument("--url", dest="url", type=str, default='http://localhost:300
 parser.add_argument("--password", dest="password", type=str, default='xxxx')
 args = parser.parse_args()
 
-script_path = "/home/mark/GitHub/cluster-monitoring/scripts/collect_user_cpu_mem.py"
+my_path = os.path.realpath(__file__)
+my_folder = os.path.dirname(my_path)
+script_path = os.path.join(my_folder, 'collect_user_cpu_mem.py')
+
 output = json.loads(subprocess.check_output([script_path, '-i', str(args.interval), '-r', str(args.repeat)]))
 
 res = requests.post(args.url, json=output, headers={'authorization': args.password})
