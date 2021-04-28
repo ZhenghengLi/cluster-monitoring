@@ -35,8 +35,10 @@ for x in range(args.repeat):
             gpu_load[m[0]]['gpu'] = float(m[1])
             gpu_load[m[0]]['mem'] = float(m[2])
 
+gpu_load_list = []
 for x in gpu_load:
     gpu_load[x]['gpu'] /= args.repeat
     gpu_load[x]['mem'] /= args.repeat
+    gpu_load_list.append({'busid': x, 'util': gpu_load[x]})
 
-print(json.dumps(gpu_load))
+print(json.dumps(gpu_load_list))
