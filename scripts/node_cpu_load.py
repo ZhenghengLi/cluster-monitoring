@@ -18,7 +18,7 @@ cpu_load = {}
 for attr in attr_list:
     cpu_load[attr] = 0.0
 
-cpu_load['mem'] = 0.0
+cpu_load['memory'] = 0.0
 
 for x in range(args.repeat):
     time.sleep(args.interval)
@@ -26,7 +26,7 @@ for x in range(args.repeat):
     for attr in attr_list:
         cpu_load[attr] += getattr(ctp, attr)
     svm = psutil.virtual_memory()
-    cpu_load['mem'] += svm.percent
+    cpu_load['memory'] += svm.percent
 
 for attr in cpu_load:
     cpu_load[attr] /= args.repeat
