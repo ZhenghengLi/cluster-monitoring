@@ -36,11 +36,11 @@ for x in range(args.repeat):
     for m in matches:
         if (m[0] in gpu_load):
             gpu_load[m[0]]['gpu'] += float(m[7])
-            gpu_load[m[0]]['mem'] += float(m[2]) / float(m[1])
+            gpu_load[m[0]]['mem'] += float(m[2]) / float(m[1]) * 100
         else:
             gpu_load[m[0]] = {}
             gpu_load[m[0]]['gpu'] = float(m[7])
-            gpu_load[m[0]]['mem'] = float(m[2]) / float(m[1])
+            gpu_load[m[0]]['mem'] = float(m[2]) / float(m[1]) * 100
 
 gpu_load_list = []
 for x in gpu_load:
