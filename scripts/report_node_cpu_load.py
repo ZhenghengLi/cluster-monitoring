@@ -23,7 +23,7 @@ script_path = os.path.join(my_folder, 'collect_node_cpu_load.py')
 
 output = json.loads(subprocess.check_output([script_path, '-i', str(args.interval), '-r', str(args.repeat)]))
 
-res = requests.post(args.url, json=output, headers={'authorization': args.password})
+res = requests.post(args.url, json=output, headers={'authorization': args.password}, verify=False)
 
 print(res.status_code)
 print(res.text)
