@@ -3,6 +3,7 @@
 import argparse
 import time
 import json
+import os
 import subprocess
 from multiprocessing import Pool
 from datetime import datetime
@@ -14,8 +15,9 @@ args = parser.parse_args()
 
 user = 'lizhh1'
 node_list = ['cu01', 'cu02', 'cu03', 'cu04', 'gpu01', 'gpu02', 'gpu03', 'gpu04']
-script_path = '/data-ib/home/lizhh1/workspace/cluster-monitoring/scripts/user_cpu_mem.py'
 
+script_dir = os.path.dirname(os.path.abspath(__file__))
+script_path = os.path.join(script_dir, 'user_cpu_mem.py')
 
 def remote_output(server: str):
     output = subprocess.check_output(['ssh', '%s@%s' % (user, server),
