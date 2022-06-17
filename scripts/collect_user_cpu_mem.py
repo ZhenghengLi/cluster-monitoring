@@ -14,7 +14,7 @@ parser.add_argument("-r", dest="repeat", type=int, default=1)
 args = parser.parse_args()
 
 user = 'lizhh1'
-node_list = ['cu01', 'cu02', 'cu03', 'cu04', 'gpu01', 'gpu02', 'gpu03', 'gpu04']
+node_list = ['cu01', 'cu02', 'cu03', 'cu04', 'gpu01', 'gpu02', 'gpu03', 'gpu04', 'gpu05']
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
 script_path = os.path.join(script_dir, 'user_cpu_mem.py')
