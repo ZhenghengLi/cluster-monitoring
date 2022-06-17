@@ -16,15 +16,16 @@ args = parser.parse_args()
 ref_gpu_util = re.compile(r"""
 GPU \s+ (\S+) \s+
 FB \s+ Memory \s+ Usage \s+
-Total  \s+ : \s+ (\d+\.?\d*) \s+ MiB \s+ # 1
-Used   \s+ : \s+ (\d+\.?\d*) \s+ MiB \s+ # 2
-Free   \s+ : \s+ (\d+\.?\d*) \s+ MiB \s+ # 3
+Total       \s+ : \s+ (\d+\.?\d*) \s+ MiB \s+ # 1
+Reserved    \s+ : \s+ (\d+\.?\d*) \s+ MiB \s+ # 2
+Used        \s+ : \s+ (\d+\.?\d*) \s+ MiB \s+ # 3
+Free        \s+ : \s+ (\d+\.?\d*) \s+ MiB \s+ # 4
 BAR1 \s+ Memory \s+ Usage \s+
-Total  \s+ : \s+ (\d+\.?\d*) \s+ MiB \s+ # 4
-Used   \s+ : \s+ (\d+\.?\d*) \s+ MiB \s+ # 5
-Free   \s+ : \s+ (\d+\.?\d*) \s+ MiB \s+ # 6
+Total       \s+ : \s+ (\d+\.?\d*) \s+ MiB \s+ # 5
+Used        \s+ : \s+ (\d+\.?\d*) \s+ MiB \s+ # 6
+Free        \s+ : \s+ (\d+\.?\d*) \s+ MiB \s+ # 7
 Utilization \s+
-Gpu    \s+ : \s+ (\d+\.?\d*) \s+ % \s+   # 7
+Gpu         \s+ : \s+ (\d+\.?\d*) \s+ % \s+   # 8
 """, re.X)
 
 gpu_load = {}
@@ -35,12 +36,12 @@ for x in range(args.repeat):
     matches = re.findall(ref_gpu_util, nvidia_smi_output)
     for m in matches:
         if (m[0] in gpu_load):
-            gpu_load[m[0]]['gpu'] += float(m[7])
-            gpu_load[m[0]]['mem'] += float(m[2]) / float(m[1]) * 100
+            gpu_load[m[0]]['gpu'] += float(m[8])
+            gpu_load[m[0]]['mem'] += float(m[3]) / float(m[1]) * 100
         else:
             gpu_load[m[0]] = {}
-            gpu_load[m[0]]['gpu'] = float(m[7])
-            gpu_load[m[0]]['mem'] = float(m[2]) / float(m[1]) * 100
+            gpu_load[m[0]]['gpu'] = float(m[8])
+            gpu_load[m[0]]['mem'] = float(m[3]) / float(m[1]) * 100
 
 gpu_load_list = []
 for x in gpu_load:
